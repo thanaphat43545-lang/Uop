@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍎 Blox Fruits - ระบบคิวรับจ้าง</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a1a;
+            font-family: 'Rubik', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(255, 100, 0, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(255, 50, 0, 0.06) 0%, transparent 60%);
+            animation: bgPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgPulse {
+            0% { background-size: 100% 100%; opacity: 1; }
+            50% { background-size: 120% 120%; opacity: 0.9; }
+            100% { background-size: 100% 100%; opacity: 1; }
+        }
+
+        .container {
+            background: linear-gradient(145deg, #12122a, #1a1a3e);
+            border: 3px solid #ff6b00;
+            border-radius: 28px;
+            padding: 30px;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 0 0 80px rgba(255, 107, 0, 0.15), inset 0 0 80px rgba(255, 107, 0, 0.03);
+            position: relative;
+            overflow: hidden;
+            animation: containerIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes containerIn {
+            from { opacity: 0; transform: scale(0.95) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(255, 107, 0, 0.015) 20px,
+                rgba(255, 107, 0, 0.015) 21px
+            );
+            pointer-events: none;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { transform: translate(0, 0); }
+            to { transform: translate(40px, 40px); }
+        }
+
+        /* --------------------------------------------- */
+        /* HEADER
+        /* --------------------------------------------- */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            animation: headerIn 1s ease;
+        }
+
+        @keyframes headerIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header .logo {
+            font-size: 52px;
+            display: block;
+            margin-bottom: 2px;
+            animation: floatLogo 3s ease-in-out infinite;
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 34px;
+            font-weight: 900;
+            text-shadow: 0 0 40px rgba(255, 107, 0, 0.3), 0 4px 0 #8a3a00;
+            letter-spacing: 1px;
+        }
+
+        .header h1 span {
+            color: #ff6b00;
+            display: inline-block;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 10px rgba(255, 107, 0, 0.2); }
+            100% { text-shadow: 0 0 30px rgba(255, 107, 0, 0.6), 0 0 60px rgba(255, 107, 0, 0.2); }
+        }
+
+        .header .sub {
+            color: #8899bb;
+            font-size: 13px;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .header .sub .pulse {
+            display: inline-block;
+            animation: pulseDot 1.5s infinite;
+            color: #ff6b00;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        /* --------------------------------------------- */
+        /* NAV
+        /* --------------------------------------------- */
+        .nav {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 22px;
+            position: relative;
+            flex-wrap: wrap;
+            animation: navIn 1s ease 0.2s both;
+        }
+
+        @keyframes navIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-btn {
+            padding: 10px 22px;
+            border: 2px solid #2a2a5a;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            color: #8899bb;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            letter-spacing: 0.5px;
+            position: relative;
+            flex: 1;
+            text-align: center;
+            max-width: 160px;
+        }
+
+        .nav-btn:hover {
+            border-color: #ff6b00;
+            color: #fff;
+            background: rgba(255, 107, 0, 0.08);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(255, 107, 0, 0.15);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #ff6b00, #cc5500);
+            border-color: #ff6b00;
+            color: #fff;
+            box-shadow: 0 0 40px rgba(255, 107, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn .badge {
+            background: #ff1744;
+            color: #fff;
+            border-radius: 50%;
+            padding: 1px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 6px;
+            animation: badgePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes badgePop {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        /* --------------------------------------------- */
+        /* PAGES
+        /* --------------------------------------------- */
+        .page {
+            display: none;
+            animation: fadePage 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadePage {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --------------------------------------------- */
+        /* STATS BAR
+        /* --------------------------------------------- */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .stats-summary .stat {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2a2a5a;
+            border-radius: 14px;
+            padding: 10px 6px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(4px);
+            animation: statIn 0.6s ease both;
+        }
+
+        .stats-summary .stat:nth-child(1) { animation-delay: 0.05s; }
+        .stats-summary .stat:nth-child(2) { animation-delay: 0.10s; }
+        .stats-summary .stat:nth-child(3) { animation-delay: 0.15s; }
+        .stats-summary .stat:nth-child(4) { animation-delay: 0.20s; }
+        .stats-summary .stat:nth-child(5) { animation-delay: 0.25s; }
+        .stats-summary .stat:nth-child(6) { animation-delay: 0.30s; }
+
+        @keyframes statIn {
+            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .stats-summary .stat:hover {
+            border-color: #ff6b00;
+            background: rgba(255, 107, 0, 0.08);
+            transform: scale(1.04) translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 107, 0, 0.1);
+        }
+
+        .stats-summary .stat .num {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 900;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .stats-summary .stat .num.pop {
+            animation: numPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes numPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); color: #ff6b00; }
+            100% { transform: scale(1); }
+        }
+
+        .stats-summary .stat .label {
+            color: #8899bb;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .stat-total .num { color: #ffd700; }
+        .stat-doing .num { color: #ff6b35; }
+        .stat-waiting .num { color: #ffb800; }
+        .stat-done .num { color: #00e676; }
+        .stat-earned .num { color: #ff6b00; }
+        .stat-queue-done .num { color: #4fc3f7; }
+
+        /* --------------------------------------------- */
+        /* WALLET
+        /* --------------------------------------------- */
+        .wallet-section {
+            background: rgba(255, 107, 0, 0.06);
+            border: 2px solid #ff6b00;
+            border-radius: 18px;
+            padding: 18px 22px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            animation: walletIn 0.8s ease 0.3s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallet-section::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.05) 0%, transparent 60%);
+            animation: walletShine 6s ease-in-out infinite;
+        }
+
+        @keyframes walletShine {
+            0% { transform: translate(-30%, -30%) scale(1); }
+            50% { transform: translate(30%, 30%) scale(1.5); }
+            100% { transform: translate(-30%, -30%) scale(1); }
+        }
+
+        @keyframes walletIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .wallet-section .wallet-info {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wallet-section .wallet-balance {
+            color: #fff;
+        }
+
+        .wallet-section .wallet-balance .label {
+            color: #8899bb;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .wallet-section .wallet-balance .amount {
+            font-size: 32px;
+            font-weight: 900;
+            color: #ffd700;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .wallet-section .wallet-balance .amount.pop {
+            animation: numPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .wallet-section .wallet-balance .amount .currency {
+            font-size: 18px;
+            color: #ff6b00;
+        }
+
+        .wallet-section .wallet-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-withdraw {
+            background: linear-gradient(135deg, #00c853, #00a844);
+            color: #fff;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Rubik', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-withdraw::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .btn-withdraw:hover::after {
+            opacity: 1;
+        }
+
+        .btn-withdraw:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 40px rgba(0, 200, 83, 0.4);
+        }
+
+        .btn-withdraw:active {
+            transform: scale(0.95);
+        }
+
+        .btn-withdraw:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-history {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid #2a2a5a;
+            color: #8899bb;
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Rubik', sans-serif;
+        }
+
+        .btn-history:hover {
+            border-color: #4fc3f7;
+            color: #fff;
+            background: rgba(79, 195, 247, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .btn-history:active {
+            transform: scale(0.95);
+        }
+
+        /* --------------------------------------------- */
+        /* QUEUE LIST
+        /* --------------------------------------------- */
+        .queue-list {
+            list-style: none;
+            max-height: 310px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .queue-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .queue-list::-webkit-scrollbar-track {
+            background: #1a1a3e;
+            border-radius: 10px;
+        }
+
+        .queue-list::-webkit-scrollbar-thumb {
+            background: #ff6b00;
+            border-radius: 10px;
+        }
+
+        .queue-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #2a2a5a;
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: queueIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        .queue-item:nth-child(1) { animation-delay: 0.05s; }
+        .queue-item:nth-child(2) { animation-delay: 0.10s; }
+        .queue-item:nth-child(3) { animation-delay: 0.15s; }
+        .queue-item:nth-child(4) { animation-delay: 0.20s; }
+        .queue-item:nth-child(5) { animation-delay: 0.25s; }
+        .queue-item:nth-child(6) { animation-delay: 0.30s; }
+        .queue-item:nth-child(7) { animation-delay: 0.35s; }
+        .queue-item:nth-child(8) { animation-delay: 0.40s; }
+        .queue-item:nth-child(9) { animation-delay: 0.45s; }
+        .queue-item:nth-child(10) { animation-delay: 0.50s; }
+
+        @keyframes queueIn {
+            from { opacity: 0; transform: translateX(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        .queue-item.removing {
+            animation: queueOut 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes queueOut {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.8) translateX(30px); }
+        }
+
+        .queue-item:hover {
+            border-color: #ff6b00;
+            background: rgba(255, 107, 0, 0.07);
+            transform: translateX(5px) scale(1.01);
+            box-shadow: 0 8px 30px rgba(255, 107, 0, 0.05);
+        }
+
+        .queue-item .info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .queue-item .number {
+            background: linear-gradient(135deg, #ff6b00, #cc5500);
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 13px;
+            flex-shrink: 0;
+            box-shadow: 0 0 25px rgba(255, 107, 0, 0.25);
+            animation: numPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes numPulse {
+            0%, 100% { box-shadow: 0 0 25px rgba(255, 107, 0, 0.25); }
+            50% { box-shadow: 0 0 40px rgba(255, 107, 0, 0.4); }
+        }
+
+        .queue-item .details .name {
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .queue-item .details .name .game-id {
+            color: #4fc3f7;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(79, 195, 247, 0.12);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            border-radius: 6px;
+            padding: 1px 8px;
+            margin-left: 4px;
+            display: inline-block;
+            animation: tagPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes tagPulse {
+            0%, 100% { border-color: rgba(79, 195, 247, 0.2); }
+            50% { border-color: rgba(79, 195, 247, 0.6); }
+        }
+
+        .queue-item .details .customer-code {
+            color: #ff6b00;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(255, 107, 0, 0.12);
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            border-radius: 6px;
+            padding: 1px 8px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        .queue-item .details .job {
+            color: #8899bb;
+            font-size: 12px;
+        }
+
+        .queue-item .details .reward {
+            color: #ffd700;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .queue-item .details .items-needed {
+            margin-top: 3px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .queue-item .details .item-tag {
+            background: rgba(74, 108, 247, 0.2);
+            border: 1px solid rgba(74, 108, 247, 0.3);
+            border-radius: 6px;
+            padding: 1px 10px;
+            font-size: 10px;
+            color: #82b1ff;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .queue-item .details .item-tag:hover {
+            background: rgba(74, 108, 247, 0.35);
+            transform: scale(1.05);
+        }
+
+        .queue-item .status-badge {
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            transition: all 0.4s ease;
+            animation: badgeIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes badgeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .status-doing {
+            background: #ff6b35;
+            color: #fff;
+            animation: pulseBadge 1.5s infinite;
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.25);
+        }
+
+        .status-waiting {
+            background: #ffb800;
+            color: #1a1a2e;
+        }
+
+        @keyframes pulseBadge {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 53, 0.2); }
+            50% { box-shadow: 0 0 50px rgba(255, 107, 53, 0.5); }
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 5px 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Rubik', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn:active::after {
+            width: 200%;
+            height: 200%;
+        }
+
+        .btn-start {
+            background: #ff6b00;
+            color: #fff;
+        }
+        .btn-start:hover {
+            background: #ff8533;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
+            transform: scale(1.05) translateY(-2px);
+        }
+        .btn-start:active { transform: scale(0.95); }
+
+        .btn-done {
+            background: #00c853;
+            color: #fff;
+        }
+        .btn-done:hover {
+            background: #00e676;
+            box-shadow: 0 0 30px rgba(0, 200, 83, 0.4);
+            transform: scale(1.05) translateY(-2px);
+        }
+        .btn-done:active { transform: scale(0.95); }
+
+        .btn-back {
+            background: #ffb800;
+            color: #1a1a2e;
+        }
+        .btn-back:hover {
+            background: #ffcc33;
+            transform: scale(1.05) translateY(-2px);
+        }
+        .btn-back:active { transform: scale(0.95); }
+
+        .btn-delete {
+            background: #ff1744;
+            color: #fff;
+        }
+        .btn-delete:hover {
+            background: #ff3355;
+            box-shadow: 0 0 30px rgba(255, 23, 68, 0.4);
+            transform: scale(1.05) translateY(-2px);
+        }
+        .btn-delete:active { transform: scale(0.95); }
+
+        /* --------------------------------------------- */
+        /* ADD FORM
+        /* --------------------------------------------- */
+        .add-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #2a2a5a;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            animation: formIn 0.6s ease 0.4s both;
+        }
+
+        @keyframes formIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .add-section input,
+        .add-section select {
+            padding: 10px 14px;
+            border-radius: 14px;
+            border: 2px solid #2a2a5a;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-size: 13px;
+            font-family: 'Rubik', sans-serif;
+            flex: 1;
+            min-width: 100px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .add-section input::placeholder {
+            color: #556688;
+        }
+
+        .add-section input:focus,
+        .add-section select:focus {
+            outline: none;
+            border-color: #ff6b00;
+            box-shadow: 0 0 25px rgba(255, 107, 0, 0.12);
+            transform: scale(1.02);
+        }
+
+        .add-section select option {
+            background: #1a1a3e;
+            color: #fff;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #ff6b00, #cc5500);
+            color: #fff;
+            padding: 10px 28px;
+            font-size: 14px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Rubik', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-add::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .btn-add:hover::after {
+            opacity: 1;
+        }
+
+        .btn-add:hover {
+            transform: scale(1.04) translateY(-2px);
+            box-shadow: 0 8px 50px rgba(255, 107, 0, 0.35);
+        }
+
+        .btn-add:active {
+            transform: scale(0.95);
+        }
+
+        .btn-sample {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid #2a2a5a;
+            color: #8899bb;
+            padding: 10px 20px;
+            font-size: 13px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Rubik', sans-serif;
+        }
+
+        .btn-sample:hover {
+            border-color: #ff6b00;
+            color: #fff;
+            background: rgba(255, 107, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .btn-sample:active {
+            transform: scale(0.95);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .form-actions .btn-add {
+            flex: 1;
+        }
+
+        .reset-section {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+            animation: resetIn 0.6s ease 0.5s both;
+        }
+
+        @keyframes resetIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-reset {
+            background: rgba(255, 23, 68, 0.15);
+            border: 1px solid #ff1744;
+            color: #ff1744;
+            padding: 6px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Rubik', sans-serif;
+        }
+
+        .btn-reset:hover {
+            background: #ff1744;
+            color: #fff;
+            box-shadow: 0 8px 35px rgba(255, 23, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-reset:active {
+            transform: scale(0.95);
+        }
+
+        .btn-reset-all {
+            background: rgba(255, 107, 0, 0.15);
+            border: 1px solid #ff6b00;
+            color: #ff6b00;
+            padding: 6px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Rubik', sans-serif;
+        }
+
+        .btn-reset-all:hover {
+            background: #ff6b00;
+            color: #fff;
+            box-shadow: 0 8px 35px rgba(255, 107, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-reset-all:active {
+            transform: scale(0.95);
+        }
+
+        /* --------------------------------------------- */
+        /* STATS PAGE
+        /* --------------------------------------------- */
+        .stats-page {
+            padding: 10px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2a2a5a;
+            border-radius: 18px;
+            padding: 18px 20px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: cardIn 0.6s ease both;
+        }
+
+        .stats-card:nth-child(1) { animation-delay: 0.05s; }
+        .stats-card:nth-child(2) { animation-delay: 0.10s; }
+        .stats-card:nth-child(3) { animation-delay: 0.15s; }
+        .stats-card:nth-child(4) { animation-delay: 0.20s; }
+        .stats-card:nth-child(5) { animation-delay: 0.25s; }
+        .stats-card:nth-child(6) { animation-delay: 0.30s; }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-card:hover {
+            border-color: #ff6b00;
+            background: rgba(255, 107, 0, 0.06);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 8px 40px rgba(255, 107, 0, 0.05);
+        }
+
+        .stats-card .card-label {
+            color: #8899bb;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-card .card-value {
+            color: #fff;
+            font-size: 30px;
+            font-weight: 900;
+            margin-top: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .stats-card .card-value.pop {
+            animation: numPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .stats-card .card-value.orange { color: #ff6b00; }
+        .stats-card .card-value.gold { color: #ffd700; }
+        .stats-card .card-value.blue { color: #4fc3f7; }
+        .stats-card .card-value.green { color: #00e676; }
+        .stats-card .card-value.red { color: #ff6b35; }
+        .stats-card .card-value.purple { color: #b388ff; }
+
+        .stats-card .card-sub {
+            color: #556688;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* --------------------------------------------- */
+        /* HISTORY
+        /* --------------------------------------------- */
+        .history-list {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: #1a1a3e;
+            border-radius: 10px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: #4fc3f7;
+            border-radius: 10px;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #2a2a5a;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            animation: historyIn 0.4s ease both;
+        }
+
+        .history-item:nth-child(1) { animation-delay: 0.05s; }
+        .history-item:nth-child(2) { animation-delay: 0.10s; }
+        .history-item:nth-child(3) { animation-delay: 0.15s; }
+
+        @keyframes historyIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .history-item .h-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-item .h-left .h-amount {
+            font-weight: 700;
+            font-size: 16px;
+            color: #ffd700;
+        }
+
+        .history-item .h-left .h-amount.withdraw {
+            color: #ff6b35;
+        }
+
+        .history-item .h-left .h-desc {
+            color: #8899bb;
+            font-size: 12px;
+        }
+
+        .history-item .h-right {
+            color: #556688;
+            font-size: 11px;
+            text-align: right;
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 30px 20px;
+            color: #445577;
+            font-size: 14px;
+        }
+
+        /* --------------------------------------------- */
+        /* TOAST
+        /* --------------------------------------------- */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a1a3e;
+            border: 2px solid #ff6b00;
+            border-radius: 18px;
+            padding: 16px 22px;
+            color: #fff;
+            font-family: 'Rubik', sans-serif;
+            font-size: 13px;
+            max-width: 380px;
+            box-shadow: 0 0 60px rgba(255, 107, 0, 0.2);
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 999;
+            backdrop-filter: blur(10px);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast .toast-title {
+            color: #ff6b00;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .toast .toast-detail {
+            color: #8899bb;
+            margin-top: 3px;
+        }
+
+        .toast .toast-id {
+            color: #4fc3f7;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        .toast .toast-items {
+            margin-top: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .toast .toast-item-tag {
+            background: rgba(74, 108, 247, 0.2);
+            border: 1px solid rgba(74, 108, 247, 0.3);
+            border-radius: 6px;
+            padding: 2px 10px;
+            font-size: 11px;
+            color: #82b1ff;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #1a1a3e;
+            color: #445577;
+            font-size: 11px;
+            animation: footerIn 1s ease 0.6s both;
+        }
+
+        @keyframes footerIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .footer .highlight {
+            color: #ff6b00;
+            font-weight: 600;
+        }
+
+        /* --------------------------------------------- */
+        /* MODAL
+        /* --------------------------------------------- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: overlayIn 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        @keyframes overlayIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: linear-gradient(145deg, #1a1a3e, #12122a);
+            border: 2px solid #ff6b00;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 0 80px rgba(255, 107, 0, 0.2);
+            animation: modalIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal h2 {
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .modal p {
+            color: #8899bb;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .modal .modal-balance {
+            color: #ffd700;
+            font-size: 28px;
+            font-weight: 900;
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 12px;
+            border: 1px solid #2a2a5a;
+            margin-bottom: 18px;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 2px solid #2a2a5a;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-size: 18px;
+            font-family: 'Rubik', sans-serif;
+            text-align: center;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .modal input:focus {
+            outline: none;
+            border-color: #ff6b00;
+            box-shadow: 0 0 25px rgba(255, 107, 0, 0.15);
+            transform: scale(1.02);
+        }
+
+        .modal .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal .modal-actions button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            font-family: 'Rubik', sans-serif;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal .modal-actions .btn-confirm {
+            background: linear-gradient(135deg, #00c853, #00a844);
+            color: #fff;
+        }
+
+        .modal .modal-actions .btn-confirm:hover {
+            transform: scale(1.04) translateY(-2px);
+            box-shadow: 0 8px 40px rgba(0, 200, 83, 0.3);
+        }
+
+        .modal .modal-actions .btn-confirm:active {
+            transform: scale(0.95);
+        }
+
+        .modal .modal-actions .btn-cancel {
+            background: rgba(255, 255, 255, 0.08);
+            color: #8899bb;
+            border: 2px solid #2a2a5a;
+        }
+
+        .modal .modal-actions .btn-cancel:hover {
+            border-color: #ff1744;
+            color: #ff1744;
+            transform: translateY(-2px);
+        }
+
+        .modal .modal-actions .btn-cancel:active {
+            transform: scale(0.95);
+        }
+
+        /* --------------------------------------------- */
+        /* RESPONSIVE
+        /* --------------------------------------------- */
+        @media (max-width: 850px) {
+            .stats-summary {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .wallet-section {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .wallet-section .wallet-info {
+                justify-content: center;
+            }
+            .wallet-section .wallet-actions {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .container { padding: 16px 12px; }
+            .header h1 { font-size: 24px; }
+            .header .logo { font-size: 40px; }
+            .nav-btn { padding: 8px 12px; font-size: 12px; max-width: unset; flex: 1; }
+            .queue-item { flex-direction: column; align-items: stretch; }
+            .queue-item .info { min-width: unset; }
+            .add-section { flex-direction: column; }
+            .add-section input, .add-section select { min-width: unset; }
+            .form-actions { flex-direction: column; }
+            .btn-add { width: 100%; }
+            .btn-sample { width: 100%; text-align: center; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .stats-card .card-value { font-size: 26px; }
+            .toast { left: 16px; right: 16px; bottom: 16px; max-width: unset; padding: 14px 18px; }
+            .reset-section { flex-direction: column; }
+            .reset-section .btn-reset,
+            .reset-section .btn-reset-all { width: 100%; text-align: center; }
+            .wallet-section .wallet-balance .amount { font-size: 26px; }
+            .btn-withdraw { width: 100%; text-align: center; }
+            .btn-history { width: 100%; text-align: center; }
+            .modal { padding: 20px; }
+            .modal .modal-actions { flex-direction: column; }
+        }
+
+        @media (max-width: 450px) {
+            .stats-summary { grid-template-columns: repeat(2, 1fr); }
+            .stats-summary .stat .num { font-size: 16px; }
+            .stats-summary .stat { padding: 8px 4px; }
+            .queue-item .number { width: 28px; height: 28px; font-size: 11px; }
+            .nav { gap: 4px; }
+            .nav-btn { padding: 6px 8px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- HEADER -->
+    <div class="header">
+        <span class="logo">🍎</span>
+        <h1>BLOX <span>FRUITS</span></h1>
+        <div class="sub"><span class="pulse">⚡</span> ระบบรับจ้าง · Auto-Delete เมื่อเสร็จ <span class="pulse">⚡</span></div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="nav">
+        <button class="nav-btn active" onclick="switchPage('queue')" id="navQueue">
+            📋 คิว <span class="badge" id="navBadge">0</span>
+        </button>
+        <button class="nav-btn" onclick="switchPage('wallet')" id="navWallet">
+            💰 กระเป๋า
+        </button>
+        <button class="nav-btn" onclick="switchPage('stats')" id="navStats">
+            📊 สถิติ
+        </button>
+    </div>
+
+    <!-- ===== PAGE: QUEUE ===== -->
+    <div class="page active" id="pageQueue">
+        <!-- Stats -->
+        <div class="stats-summary">
+            <div class="stat stat-total">
+                <span class="num" id="totalCount">0</span>
+                <span class="label">👥 ทั้งหมด</span>
+            </div>
+            <div class="stat stat-doing">
+                <span class="num" id="doingCount">0</span>
+                <span class="label">⚔️ กำลังทำ</span>
+            </div>
+            <div class="stat stat-waiting">
+                <span class="num" id="waitingCount">0</span>
+                <span class="label">⏳ รอคิว</span>
+            </div>
+            <div class="stat stat-done">
+                <span class="num" id="doneCount">0</span>
+                <span class="label">✅ เสร็จ</span>
+            </div>
+            <div class="stat stat-earned">
+                <span class="num" id="totalEarned">0</span>
+                <span class="label">💰 เงินสะสม</span>
+            </div>
+            <div class="stat stat-queue-done">
+                <span class="num" id="totalJobsDone">0</span>
+                <span class="label">📋 คิวที่ทำไป</span>
+            </div>
+        </div>
+
+        <!-- Wallet Short -->
+        <div class="wallet-section">
+            <div class="wallet-info">
+                <div class="wallet-balance">
+                    <div class="label">💰 คงเหลือในกระเป๋า</div>
+                    <div class="amount"><span class="currency">฿</span> <span id="walletBalance">0</span></div>
+                </div>
+            </div>
+            <div class="wallet-actions">
+                <button class="btn-withdraw" onclick="openWithdrawModal()" id="btnWithdraw">💳 ถอนเงิน</button>
+                <button class="btn-history" onclick="switchPage('wallet')">📜 ประวัติ</button>
+            </div>
+        </div>
+
+        <!-- Queue List -->
+        <ul class="queue-list" id="queueList">
+            <div style="text-align:center;padding:40px 20px;color:#445577;font-size:15px;">
+                🍃 ยังไม่มีคิว<br>
+                <span style="font-size:12px;">กรอกข้อมูลด้านล่างเพื่อเริ่ม!</span>
+            </div>
+        </ul>
+
+        <!-- Add Form -->
+        <div class="add-section">
+            <input type="text" id="inputName" placeholder="👤 ชื่อลูกค้า" />
+            <input type="text" id="inputGameId" placeholder="🎮 รหัสเข้าเกม" />
+            <input type="text" id="inputJob" placeholder="⚔️ งานที่จ้าง" />
+            <input type="text" id="inputReward" placeholder="💰 ค่าจ้าง (เช่น 1.2M)" />
+            <input type="text" id="inputItems" placeholder="🎯 ไอเทม (คั่น ,)" />
+            <select id="inputStatus">
+                <option value="waiting">⏳ รอคิว</option>
+                <option value="doing">⚔️ กำลังทำ</option>
+            </select>
+            <div class="form-actions">
+                <button class="btn-add" onclick="addQueue()">➕ เพิ่มคิว</button>
+                <button class="btn-sample" onclick="loadSample()">📦 ตัวอย่าง</button>
+            </div>
+        </div>
+
+        <div class="reset-section">
+            <button class="btn-reset" onclick="resetAll()">🔄 รีเซ็ตยอด</button>
+            <button class="btn-reset-all" onclick="clearAll()">🗑️ ล้างคิว</button>
+        </div>
+    </div>
+
+    <!-- ===== PAGE: WALLET ===== -->
+    <div class="page" id="pageWallet">
+        <div class="stats-page">
+            <h2 style="color:#fff;font-size:22px;margin-bottom:4px;">💰 กระเป๋าเงิน</h2>
+            <p style="color:#556688;font-size:13px;margin-bottom:16px;">จัดการยอดเงินสะสมและประวัติการถอน</p>
+
+            <div style="background:rgba(255,215,0,0.05);border:2px solid #ffd700;border-radius:18px;padding:20px;text-align:center;margin-bottom:18px;">
+                <div style="color:#8899bb;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">ยอดคงเหลือ</div>
+                <div style="color:#ffd700;font-size:42px;font-weight:900;">฿ <span id="walletBalancePage">0</span></div>
+                <div style="color:#556688;font-size:12px;margin-top:4px;">จากงานที่ทำไป <span id="walletJobsCount">0</span> คิว</div>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+                <button class="btn-withdraw" onclick="openWithdrawModal()" style="flex:1;">💳 ถอนเงิน</button>
+                <button class="btn-reset" onclick="resetAll()" style="flex:1;text-align:center;">🔄 รีเซ็ตยอด</button>
+            </div>
+
+            <h3 style="color:#fff;font-size:17px;margin-bottom:10px;">📜 ประวัติการถอน</h3>
+            <div class="history-list" id="historyList">
+                <div class="history-empty">ยังไม่มีประวัติการถอน</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PAGE: STATS ===== -->
+    <div class="page" id="pageStats">
+        <div class="stats-page">
+            <h2 style="color:#fff;font-size:22px;margin-bottom:4px;">📊 สรุปรายได้</h2>
+            <p style="color:#556688;font-size:13px;margin-bottom:14px;">ภาพรวมยอดเงินและจำนวนคิวที่ทำไปแล้ว</p>
+
+            <div class="stats-grid">
+                <div class="stats-card">
+                    <div class="card-label">💰 เงินสะสมทั้งหมด</div>
+                    <div class="card-value orange" id="statsEarned">0</div>
+                    <div class="card-sub">จากงานที่ทำเสร็จแล้ว</div>
+                </div>
+                <div class="stats-card">
+                    <div class="card-label">💳 ถอนไปแล้ว</div>
+                    <div class="card-value red" id="statsWithdrawn">0</div>
+                    <div class="card-sub">จำนวนที่ถอนออกไปแล้ว</div>
+                </div>
+                <div class="stats-card">
+                    <div class="card-label">📋 จำนวนคิวที่ทำไป</div>
+                    <div class="card-value blue" id="statsJobsDone">0</div>
+                    <div class="card-sub">งานที่ส่งมอบให้ลูกค้าแล้ว</div>
+                </div>
+                <div class="stats-card">
+                    <div class="card-label">⚔️ กำลังทำอยู่</div>
+                    <div class="card-value red" id="statsDoing">0</div>
+                    <div class="card-sub">คิวที่กำลังดำเนินการ</div>
+                </div>
+                <div class="stats-card">
+                    <div class="card-label">⏳ รอคิว</div>
+                    <div class="card-value gold" id="statsWaiting">0</div>
+                    <div class="card-sub">คิวที่รอการเริ่มงาน</div>
+                </div>
+                <div class="stats-card">
+                    <div class="card-label">✅ อัตราสำเร็จ</div>
+                    <div class="card-value green" id="statsSuccessRate">0%</div>
+                    <div class="card-sub">(คิวที่เสร็จแล้ว / คิวทั้งหมด)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        💬 ทักหา <span class="highlight">@YourName</span> เพื่อจ้างงาน · พิกัด: เกาะแรก
+    </div>
+</div>
+
+<!-- ===== MODAL WITHDRAW ===== -->
+<div class="modal-overlay" id="withdrawModal">
+    <div class="modal">
+        <h2>💳 ถอนเงิน</h2>
+        <p>กรอกจำนวนเงินที่ต้องการถอนออกจากกระเป๋า</p>
+        <div class="modal-balance">฿ <span id="modalBalance">0</span></div>
+        <input type="number" id="withdrawAmount" placeholder="0" min="0" step="1000" />
+        <div class="modal-actions">
+            <button class="btn-confirm" onclick="confirmWithdraw()">✅ ยืนยันการถอน</button>
+            <button class="btn-cancel" onclick="closeWithdrawModal()">ยกเลิก</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast">
+    <div class="toast-title" id="toastTitle">✅ งานเสร็จสิ้น!</div>
+    <div class="toast-detail" id="toastDetail">ลูกค้า: NoobSlayer99</div>
+    <div class="toast-id" id="toastGameId">🎮 รหัส: 123456789</div>
+    <div class="toast-items" id="toastItems"></div>
+</div>
+
+<script>
+    // ===== DATA =====
+    let queues = [];
+    let nextId = 1;
+    let totalEarned = 0;
+    let totalJobsDone = 0;
+    let totalWithdrawn = 0;
+    let withdrawHistory = [];
+
+    function generateCustomerCode() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+    }
+
+    function getWalletBalance() {
+        return totalEarned - totalWithdrawn;
+    }
+
+    function loadData() {
+        const saved = localStorage.getItem('bloxQueueData_v6');
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                queues = data.queues || [];
+                nextId = data.nextId || 1;
+                totalEarned = data.totalEarned || 0;
+                totalJobsDone = data.totalJobsDone || 0;
+                totalWithdrawn = data.totalWithdrawn || 0;
+                withdrawHistory = data.withdrawHistory || [];
+            } catch (e) { console.log('โหลดข้อมูลล้มเหลว'); }
+        }
+    }
+
+    function saveData() {
+        localStorage.setItem('bloxQueueData_v6', JSON.stringify({
+            queues, nextId, totalEarned, totalJobsDone, totalWithdrawn, withdrawHistory
+        }));
+    }
+
+    function parseReward(rewardStr) {
+        if (!rewardStr) return 0;
+        let num = parseFloat(rewardStr.replace(/,/g, '').replace(/[^0-9.]/g, ''));
+        if (isNaN(num)) return 0;
+        if (rewardStr.toUpperCase().includes('M')) num *= 1000000;
+        if (rewardStr.toUpperCase().includes('K') && !rewardStr.toUpperCase().includes('M')) num *= 1000;
+        return num;
+    }
+
+    function formatNumber(num) {
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+        return num.toString();
+    }
+
+    function formatNumberFull(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    // ===== NAVIGATION =====
+    function switchPage(page) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+        if (page === 'queue') {
+            document.getElementById('pageQueue').classList.add('active');
+            document.getElementById('navQueue').classList.add('active');
+        } else if (page === 'wallet') {
+            document.getElementById('pageWallet').classList.add('active');
+            document.getElementById('navWallet').classList.add('active');
+            renderWalletPage();
+        } else {
+            document.getElementById('pageStats').classList.add('active');
+            document.getElementById('navStats').classList.add('active');
+            updateStatsPage();
+        }
+    }
+
+    // ===== POP ANIMATION =====
+    function popElement(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('pop');
+            void el.offsetWidth;
+            el.classList.add('pop');
+        }
+    }
+
+    // ===== RENDER =====
+    function render() {
+        const list = document.getElementById('queueList');
+        list.innerHTML = '';
+
+        const order = { doing: 0, waiting: 1 };
+        const sorted = [...queues].sort((a, b) => order[a.status] - order[b.status] || a.id - b.id);
+
+        if (sorted.length === 0) {
+            list.innerHTML = `
+                <div style="text-align:center;padding:40px 20px;color:#445577;font-size:15px;">
+                    🍃 ยังไม่มีคิว<br>
+                    <span style="font-size:12px;">กรอกข้อมูลด้านล่างเพื่อเริ่ม!</span>
+                </div>
+            `;
+        } else {
+            sorted.forEach((q, index) => {
+                const li = document.createElement('li');
+                li.className = 'queue-item';
+                const statusMap = {
+                    doing: { label: '⚔️ กำลังทำ', class: 'status-doing' },
+                    waiting: { label: '⏳ รอคิว', class: 'status-waiting' },
+                };
+                const st = statusMap[q.status] || statusMap.waiting;
+
+                let actionBtns = '';
+                if (q.status === 'waiting') {
+                    actionBtns = `<button class="btn btn-start" onclick="startJob(${q.id})">▶️ เริ่ม</button>`;
+                } else if (q.status === 'doing') {
+                    actionBtns = `
+                        <button class="btn btn-done" onclick="completeJob(${q.id})">✅ เสร็จ</button>
+                        <button class="btn btn-back" onclick="setStatus(${q.id}, 'waiting')">⏪ กลับ</button>
+                    `;
+                }
+
+                const itemsHtml = q.items && q.items.length > 0
+                    ? `<div class="items-needed">${q.items.map(item => `<span class="item-tag">🎯 ${item}</span>`).join('')}</div>`
+                    : '';
+
+                li.innerHTML = `
+                    <div class="info">
+                        <div class="number">${index + 1}</div>
+                        <div class="details">
+                            <div class="name">
+                                ${q.name}
+                                ${q.gameId ? `<span class="game-id">🎮 ${q.gameId}</span>` : ''}
+                            </div>
+                            <div class="customer-code">🆔 ${q.customerCode || '-'}</div>
+                            <div class="job">⚔️ ${q.job}</div>
+                            <div class="reward">💰 ${q.reward}</div>
+                            ${itemsHtml}
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <span class="status-badge ${st.class}">${st.label}</span>
+                        <div class="actions">
+                            ${actionBtns}
+                            <button class="btn btn-delete" onclick="removeQueue(${q.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        // Stats
+        const total = queues.length;
+        const doing = queues.filter(q => q.status === 'doing').length;
+        const waiting = queues.filter(q => q.status === 'waiting').length;
+        const done = queues.filter(q => q.status === 'done').length;
+
+        document.getElementById('totalCount').textContent = total;
+        document.getElementById('doingCount').textContent = doing;
+        document.getElementById('waitingCount').textContent = waiting;
+        document.getElementById('doneCount').textContent = done;
+        document.getElementById('totalEarned').textContent = formatNumber(totalEarned);
+        document.getElementById('totalJobsDone').textContent = totalJobsDone;
+        document.getElementById('navBadge').textContent = total;
+
+        // Wallet
+        const balance = getWalletBalance();
+        document.getElementById('walletBalance').textContent = formatNumber(balance);
+        document.getElementById('walletBalancePage').textContent = formatNumber(balance);
+        document.getElementById('walletJobsCount').textContent = totalJobsDone;
+
+        document.getElementById('btnWithdraw').disabled = balance <= 0;
+
+        saveData();
+    }
+
+    function renderWalletPage() {
+        const balance = getWalletBalance();
+        document.getElementById('walletBalancePage').textContent = formatNumber(balance);
+        document.getElementById('walletJobsCount').textContent = totalJobsDone;
+
+        const historyList = document.getElementById('historyList');
+        if (withdrawHistory.length === 0) {
+            historyList.innerHTML = `<div class="history-empty">ยังไม่มีประวัติการถอน</div>`;
+        } else {
+            historyList.innerHTML = '';
+            [...withdrawHistory].reverse().forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <div class="h-left">
+                        <div class="h-amount withdraw">- ฿ ${formatNumberFull(item.amount)}</div>
+                        <div class="h-desc">${item.desc || 'ถอนเงิน'}</div>
+                    </div>
+                    <div class="h-right">${item.date}</div>
+                `;
+                historyList.appendChild(div);
+            });
+        }
+    }
+
+    function updateStatsPage() {
+        const total = queues.length;
+        const doing = queues.filter(q => q.status === 'doing').length;
+        const waiting = queues.filter(q => q.status === 'waiting').length;
+        const totalWithDone = totalJobsDone + total;
+
+        document.getElementById('statsEarned').textContent = formatNumber(totalEarned);
+        document.getElementById('statsWithdrawn').textContent = formatNumber(totalWithdrawn);
+        document.getElementById('statsJobsDone').textContent = totalJobsDone;
+        document.getElementById('statsDoing').textContent = doing;
+        document.getElementById('statsWaiting').textContent = waiting;
+
+        const rate = totalWithDone > 0 ? Math.round((totalJobsDone / totalWithDone) * 100) : 0;
+        document.getElementById('statsSuccessRate').textContent = rate + '%';
+    }
+
+    // ===== CRUD =====
+    function addQueue() {
+        const name = document.getElementById('inputName').value.trim();
+        const gameId = document.getElementById('inputGameId').value.trim();
+        const job = document.getElementById('inputJob').value.trim();
+        const reward = document.getElementById('inputReward').value.trim();
+        const itemsRaw = document.getElementById('inputItems').value.trim();
+        const status = document.getElementById('inputStatus').value;
+
+        if (!name || !job || !reward) {
+            alert('⚠️ กรุณากรอกชื่อ งาน และค่าจ้างให้ครบ!');
+            return;
+        }
+
+        const items = itemsRaw ? itemsRaw.split(',').map(s => s.trim().toUpperCase()).filter(s => s) : [];
+        const customerCode = generateCustomerCode();
+
+        queues.push({
+            id: nextId++,
+            name,
+            gameId: gameId || '-',
+            job,
+            reward,
+            items,
+            status,
+            customerCode
+        });
+
+        document.getElementById('inputName').value = '';
+        document.getElementById('inputGameId').value = '';
+        document.getElementById('inputJob').value = '';
+        document.getElementById('inputReward').value = '';
+        document.getElementById('inputItems').value = '';
+        render();
+        updateStatsPage();
+
+        popElement('totalCount');
+        showToast('✅ เพิ่มคิวสำเร็จ!', `👤 ${name} | 💰 ${reward}`, `🎮 ${gameId || '-'}`, `🆔 ${customerCode}`);
+    }
+
+    function startJob(id) {
+        const q = queues.find(item => item.id === id);
+        if (q) { q.status = 'doing'; render(); updateStatsPage(); popElement('doingCount'); }
+    }
+
+    function completeJob(id) {
+        const q = queues.find(item => item.id === id);
+        if (!q) return;
+
+        const rewardVal = parseReward(q.reward);
+        totalEarned += rewardVal;
+        totalJobsDone += 1;
+
+        showToast('✅ งานเสร็จสิ้น!', `👤 ${q.name} | 💰 ${q.reward}`, `🎮 ${q.gameId || '-'}`, `🆔 ${q.customerCode || '-'}`);
+
+        const toast = document.getElementById('toast');
+        if (q.items && q.items.length > 0) {
+            document.getElementById('toastItems').innerHTML = q.items.map(item => `<span class="toast-item-tag">🎯 ${item}</span>`).join('');
+        } else {
+            document.getElementById('toastItems').innerHTML = '<span class="toast-item-tag">ไม่มีไอเทม</span>';
+        }
+
+        queues = queues.filter(item => item.id !== id);
+        render();
+        updateStatsPage();
+        popElement('totalEarned');
+        popElement('totalJobsDone');
+        popElement('walletBalance');
+    }
+
+    function setStatus(id, newStatus) {
+        const q = queues.find(item => item.id === id);
+        if (q) { q.status = newStatus; render(); updateStatsPage(); }
+    }
+
+    function removeQueue(id) {
+        const q = queues.find(item => item.id === id);
+        if (confirm(`❌ ลบรายการ "${q?.name}" ออกจากคิว?`)) {
+            queues = queues.filter(item => item.id !== id);
+            render();
+            updateStatsPage();
+        }
+    }
+
+    // ===== WITHDRAW =====
+    function openWithdrawModal() {
+        const balance = getWalletBalance();
+        if (balance <= 0) {
+            showToast('❌ ไม่สามารถถอนได้', 'ยอดเงินในกระเป๋าเป็น 0', '', '');
+            return;
+        }
+        document.getElementById('modalBalance').textContent = formatNumber(balance);
+        document.getElementById('withdrawAmount').value = '';
+        document.getElementById('withdrawModal').classList.add('show');
+    }
+
+    function closeWithdrawModal() {
+        document.getElementById('withdrawModal').classList.remove('show');
+    }
+
+    function confirmWithdraw() {
+        const balance = getWalletBalance();
+        const amount = parseFloat(document.getElementById('withdrawAmount').value);
+
+        if (!amount || amount <= 0) {
+            alert('⚠️ กรุณากรอกจำนวนเงินที่ถูกต้อง');
+            return;
+        }
+
+        if (amount > balance) {
+            alert(`⚠️ ยอดเงินไม่พอ! คุณมี ${formatNumber(balance)} อยู่ในกระเป๋า`);
+            return;
+        }
+
+        if (!confirm(`💳 ยืนยันการถอนเงิน ฿ ${formatNumberFull(amount)} ออกจากกระเป๋า?`)) return;
+
+        totalWithdrawn += amount;
+        withdrawHistory.push({
+            amount: amount,
+            date: new Date().toLocaleString('th-TH'),
+            desc: `ถอนเงิน ${formatNumberFull(amount)}`
+        });
+
+        closeWithdrawModal();
+        render();
+        updateStatsPage();
+        renderWalletPage();
+        popElement('walletBalance');
+        popElement('statsWithdrawn');
+
+        showToast('💳 ถอนเงินสำเร็จ!', `ถอนไป ฿ ${formatNumber(amount)}`, `คงเหลือ ฿ ${formatNumber(getWalletBalance())}`, '');
+    }
+
+    // ===== RESET / CLEAR =====
+    function resetAll() {
+        if (confirm('⚠️ รีเซ็ตยอดเงินสะสมและจำนวนคิวที่ทำไปทั้งหมด?')) {
+            totalEarned = 0;
+            totalJobsDone = 0;
+            totalWithdrawn = 0;
+            withdrawHistory = [];
+            render();
+            updateStatsPage();
+            renderWalletPage();
+            showToast('🔄 รีเซ็ตสำเร็จ', 'ยอดเงินและคิวที่ทำไปถูกรีเซ็ต', '', '');
+        }
+    }
+
+    function clearAll() {
+        if (confirm('🗑️ ล้างคิวทั้งหมดในระบบ? (ยอดเงินสะสมจะคงอยู่)')) {
+            queues = [];
+            render();
+            updateStatsPage();
+            renderWalletPage();
+            showToast('🗑️ ล้างคิวสำเร็จ', 'คิวทั้งหมดถูกลบออกจากระบบ', '', '');
+        }
+    }
+
+    // ===== SAMPLE DATA =====
+    function loadSample() {
+        if (queues.length > 0) {
+            if (!confirm('📦 มีคิวอยู่แล้ว กด "ตกลง" เพื่อเพิ่มตัวอย่าง')) return;
+        }
+
+        const samples = [
+            { name: "NoobSlayer99", gameId: "123456789", job: "ปราบบอส Don Swan", reward: "1.2M", items: ["DON_SWORD", "SHADOW_FRAG"] },
+            { name: "FruitHunter_X", gameId: "987654321", job: "ฟาร์ม Sea Beast", reward: "800K", items: ["SEA_BEAST"] },
+            { name: "LuffyFan_2024", gameId: "456789123", job: "พาเลเวล 0→700", reward: "2.5M", items: ["LEVEL_UP"] },
+            { name: "Zoro_King_OP", gameId: "321654987", job: "หา Saber V2", reward: "1.5M", items: ["SABER_V2", "TORCH"] },
+        ];
+
+        samples.forEach(s => {
+            queues.push({
+                id: nextId++,
+                name: s.name,
+                gameId: s.gameId,
+                job: s.job,
+                reward: s.reward,
+                items: s.items,
+                status: 'waiting',
+                customerCode: generateCustomerCode()
+            });
+        });
+
+        render();
+        updateStatsPage();
+        renderWalletPage();
+        showToast('📦 เพิ่มตัวอย่างข้อมูล', 'เพิ่มคิวตัวอย่าง 4 รายการ', '', '');
+    }
+
+    // ===== TOAST =====
+    let toastTimer = null;
+
+    function showToast(title, detail, extra1, extra2) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toastTitle').textContent = title;
+        document.getElementById('toastDetail').textContent = detail || '';
+        document.getElementById('toastGameId').textContent = extra1 || '';
+        document.getElementById('toastItems').innerHTML = extra2 ? `<span class="toast-item-tag">${extra2}</span>` : '';
+
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 5000);
+    }
+
+    // ===== ENTER =====
+    document.querySelectorAll('.add-section input').forEach(input => {
+        input.addEventListener('keypress', e => { if (e.key === 'Enter') addQueue(); });
+    });
+
+    // ===== MODAL CLOSE ON OVERLAY =====
+    document.getElementById('withdrawModal').addEventListener('click', function(e) {
+        if (e.target === this) closeWithdrawModal();
+    });
+
+    // ===== LOAD =====
+    loadData();
+    render();
+    updateStatsPage();
+    renderWalletPage();
+</script>
+</body>
+</html>
